@@ -3,15 +3,15 @@ name: hr-ppt
 description: >
   Specialized presentation builder for two locked scenarios: academic congress /
   lecture decks (medical / research, AMA citations, data charts) and company-standard
-  corporate decks (恒瑞 business-blue). A thin specialization of ppt-master — it locks
+  corporate decks (hr business-blue). A thin specialization of ppt-master — it locks
   the template, narrative mode, visual style, and convention defaults per scenario, then
   runs the full ppt-master pipeline. Use when the user asks for a "学术PPT", "大会幻灯",
   "讲座幻灯", "congress slides", "学术讲座", "公司PPT", "公司汇报", "述职/项目总结幻灯",
-  "恒瑞模板PPT", or mentions "hr-ppt". For generic / free-design decks with no scenario
+  "hr模板PPT", or mentions "hr-ppt". For generic / free-design decks with no scenario
   lock, use ppt-master instead.
 ---
 
-# HR-PPT — Academic & Company Presentation Builder (恒瑞)
+# HR-PPT — Academic & Company Presentation Builder (hr)
 
 > A **thin specialization** of `ppt-master`. It does **not** reimplement the pipeline. It locks
 > a scenario *profile* (template + mode + visual style + conventions + confirmation defaults),
@@ -36,9 +36,9 @@ This skill adds only the profile layer; everything else is ppt-master's.
 🚧 **GATE**: user invoked this skill (or asked for an academic / company deck).
 
 Pick the profile. **Do not ask if the request already makes it obvious** (e.g. "做个学术讲座" → academic;
-"用恒瑞模板做述职" → company; the CLAUDE.md `公司模板` alias → company). Ask one question only when genuinely ambiguous:
+"用hr模板做述职" → company; the CLAUDE.md `公司模板` alias → company). Ask one question only when genuinely ambiguous:
 
-> 这份要走 **学术**（大会/讲座·医学研究·AMA 引用·数据图表）还是 **公司**（恒瑞商务蓝·汇报/述职）模板？
+> 这份要走 **学术**（大会/讲座·医学研究·AMA 引用·数据图表）还是 **公司**（hr商务蓝·汇报/述职）模板？
 
 Once chosen, announce the locked profile in one line, then proceed to **Pipeline Delegation** below.
 
@@ -62,11 +62,11 @@ Locks the following as the **recommended defaults** carried into ppt-master Step
 
 ---
 
-## Profile B — 公司 / Company (恒瑞 corporate · 汇报 · 述职 · 项目总结)
+## Profile B — 公司 / Company (hr corporate · 汇报 · 述职 · 项目总结)
 
 | Slot | Locked default | Notes |
 |---|---|---|
-| **Template (Step 3)** | `${PPT_MASTER_DIR}/templates/decks/company_standard` (`kind: deck`) | The 恒瑞 standard deck — full replica (identity + structure + middle all locked). Inject this path into Step 3. Same target as the CLAUDE.md `公司模板` alias. |
+| **Template (Step 3)** | `${PPT_MASTER_DIR}/templates/decks/company_standard` (`kind: deck`) | The hr standard deck — full replica (identity + structure + middle all locked). Inject this path into Step 3. Same target as the CLAUDE.md `公司模板` alias. |
 | **Mode (§d Layer 1)** | `pyramid` | Conclusion-first exec reporting (述职 / 项目总结). Alternate `briefing` for status / 周报 / reference packs. |
 | **Visual style (§d Layer 2)** | `swiss-minimal` | Stable, professional, grid-locked — matches the business-blue deck. Alternate `soft-rounded` for training material. |
 | **Color (§e)** | locked by deck = business blue `#2661B2` | Deck `kind` locks identity; do not re-poll color unless the user overrides. |
