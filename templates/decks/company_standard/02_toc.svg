@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- 模板: 目录页 - company_standard -->
+
+  <!-- 白色背景 -->
+  <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+
+  <!-- 左侧品牌配图 -->
+  <image x="0" y="0" width="640" height="720" xlink:href="toc_side.jpg" preserveAspectRatio="xMidYMid slice"/>
+  <!-- 左侧深蓝叠色，保证白字可读 -->
+  <rect x="0" y="0" width="640" height="720" fill="#002B5C" fill-opacity="0.45"/>
+
+  <!-- 左上品牌 Logo -->
+  <image x="36" y="54" width="210" height="132" xlink:href="logo_main.png" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- 标题 目录 -->
+  <text x="64" y="341" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="53" font-weight="bold" fill="#FFFFFF">目 录</text>
+  <rect x="66" y="380" width="86" height="3" fill="#FFFFFF"/>
+  <text x="65" y="422" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="32" font-weight="bold" fill="#CFDDF2" letter-spacing="2">CONTENTS</text>
+
+  <!-- 目录项 1 -->
+  <ellipse cx="689" cy="184" rx="35" ry="35" fill="#2661B2"/>
+  <text x="689" y="195" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="32" font-weight="bold" fill="#FFFFFF">01</text>
+  <text x="743" y="178" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="22" font-weight="bold" fill="#2661B2">{{TOC_ITEM_1_TITLE}}</text>
+  <text x="743" y="206" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="15" fill="#595959">{{TOC_ITEM_1_DESC}}</text>
+  <rect x="743" y="227" width="500" height="1.4" fill="#D9E2F0"/>
+
+  <!-- 目录项 2 -->
+  <ellipse cx="689" cy="324" rx="35" ry="35" fill="#2661B2"/>
+  <text x="689" y="335" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="32" font-weight="bold" fill="#FFFFFF">02</text>
+  <text x="743" y="318" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="22" font-weight="bold" fill="#2661B2">{{TOC_ITEM_2_TITLE}}</text>
+  <text x="743" y="346" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="15" fill="#595959">{{TOC_ITEM_2_DESC}}</text>
+  <rect x="743" y="367" width="500" height="1.4" fill="#D9E2F0"/>
+
+  <!-- 目录项 3 -->
+  <ellipse cx="689" cy="464" rx="35" ry="35" fill="#2661B2"/>
+  <text x="689" y="475" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="32" font-weight="bold" fill="#FFFFFF">03</text>
+  <text x="743" y="458" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="22" font-weight="bold" fill="#2661B2">{{TOC_ITEM_3_TITLE}}</text>
+  <text x="743" y="486" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="15" fill="#595959">{{TOC_ITEM_3_DESC}}</text>
+  <rect x="743" y="507" width="500" height="1.4" fill="#D9E2F0"/>
+
+  <!-- 目录项 4 -->
+  <ellipse cx="689" cy="604" rx="35" ry="35" fill="#2661B2"/>
+  <text x="689" y="615" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="32" font-weight="bold" fill="#FFFFFF">04</text>
+  <text x="743" y="598" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="22" font-weight="bold" fill="#2661B2">{{TOC_ITEM_4_TITLE}}</text>
+  <text x="743" y="626" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="15" fill="#595959">{{TOC_ITEM_4_DESC}}</text>
+  <rect x="743" y="647" width="500" height="1.4" fill="#D9E2F0"/>
+</svg>

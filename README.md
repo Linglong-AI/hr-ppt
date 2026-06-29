@@ -1,29 +1,39 @@
 # hr-ppt
 
-A Claude Code [Agent Skill](https://docs.claude.com/en/docs/claude-code/skills) — a thin scenario wrapper around [`ppt-master`](https://github.com/anthropics/skills) (or your own `ppt-master` install) that locks two presentation profiles instead of doing free design:
+Self-contained presentation skill for two locked scenarios:
 
-- **Academic** — congress / lecture decks (medical & research, AMA citations, figure/table numbering, data-chart heavy)
-- **Company** — hr business-blue corporate decks (status reports, performance reviews, project summaries)
+- **Academic**: congress, lecture, medical/research, citation-aware, data-heavy decks.
+- **Company**: HR business-blue corporate reports, project summaries, performance reviews, and internal briefings.
 
-It does **not** reimplement the SVG → PPTX pipeline. On invocation it locks one profile's template + narrative mode + visual style + typography/color/citation defaults, then delegates straight into the unmodified `ppt-master` pipeline (Step 1 → Step 7), seeding the Eight Confirmations with the profile's recommended values. Every confirmation gate stays user-editable — the wrapper only changes defaults, never the blocking gates.
-
-## Requirements
-
-- Claude Code with the `ppt-master` skill installed at a path you control
-- Update `${PPT_MASTER_DIR}` in `SKILL.md` to point at your local `ppt-master` install
+This repository includes the complete embedded ppt-master pipeline: scripts,
+references, templates, workflows, dependency list, and environment example.
+Standalone use needs no separate `ppt-master` install and no external path
+configuration.
 
 ## Install
 
-Drop this folder into your Claude Code skills directory, e.g.:
+Place this folder in your skills directory, for example:
 
-```
+```text
 ~/.claude/skills/hr-ppt/
 ```
 
+## Contents
+
+- `SKILL.md`: HR-PPT entry point and profile selection.
+- `references/ppt-master-core.md`: embedded core pipeline instructions.
+- `scripts/`: source conversion, project management, image, SVG, and PPTX tools.
+- `templates/`: layouts, decks, chart templates, icons, and design specs.
+- `workflows/`: standalone workflows such as beautify, template-fill, live preview, and chart verification.
+- `requirements.txt`: Python dependencies used by the embedded tools.
+- `.env.example`: optional provider and runtime configuration.
+
 ## Usage
 
-Ask for an academic congress deck or a company report — the skill auto-detects which profile fits, or asks once if genuinely ambiguous. See `SKILL.md` for the full profile tables and pipeline delegation contract.
+Ask for an academic deck or a company report deck. The skill chooses the profile
+when obvious, asks once when ambiguous, then runs the embedded pipeline using the
+bundled resources.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).

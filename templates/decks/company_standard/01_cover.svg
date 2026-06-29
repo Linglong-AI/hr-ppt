@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- 模板: 封面页 - company_standard -->
+  <defs>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38BFD4"/>
+      <stop offset="0.4" stop-color="#03ABDA"/>
+      <stop offset="0.7" stop-color="#2C73BA"/>
+      <stop offset="1" stop-color="#2661B1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景兜底色 -->
+  <rect x="0" y="0" width="1280" height="720" fill="#002B5C"/>
+  <!-- 品牌封面背景图 -->
+  <image x="0" y="0" width="1280" height="720" xlink:href="cover_bg.jpg" preserveAspectRatio="xMidYMid slice"/>
+
+  <!-- 左上品牌 Logo -->
+  <image x="36" y="61" width="210" height="132" xlink:href="logo_main.png" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- 主标题 -->
+  <text x="316" y="320" text-anchor="middle" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="53" font-weight="bold" fill="#FFFFFF">{{TITLE}}</text>
+
+  <!-- 装饰分隔线 -->
+  <rect x="83" y="393" width="475" height="4" fill="url(#accentGrad)"/>
+
+  <!-- 副标题 -->
+  <text x="316" y="431" text-anchor="middle" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="20" fill="#E8EEF6">{{SUBTITLE}}</text>
+
+  <!-- 汇报人 / 部门 -->
+  <text x="316" y="576" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="18" fill="#E8EEF6">{{AUTHOR}}</text>
+  <!-- 日期 -->
+  <text x="316" y="606" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="16" fill="#CFDDF2">{{DATE}}</text>
+</svg>

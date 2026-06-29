@@ -1,94 +1,114 @@
 ---
 name: hr-ppt
 description: >
-  Specialized presentation builder for two locked scenarios: academic congress /
-  lecture decks (medical / research, AMA citations, data charts) and company-standard
-  corporate decks (hr business-blue). A thin specialization of ppt-master — it locks
-  the template, narrative mode, visual style, and convention defaults per scenario, then
-  runs the full ppt-master pipeline. Use when the user asks for a "学术PPT", "大会幻灯",
-  "讲座幻灯", "congress slides", "学术讲座", "公司PPT", "公司汇报", "述职/项目总结幻灯",
-  "hr模板PPT", or mentions "hr-ppt". For generic / free-design decks with no scenario
-  lock, use ppt-master instead.
+  Self-contained presentation builder for two locked scenarios: academic congress /
+  lecture decks (medical or research, AMA citations, figure/table numbering, data
+  charts) and HR corporate decks (business-blue company reports, project summaries,
+  performance reviews, internal briefings). Includes the full embedded ppt-master
+  SVG-to-PPTX pipeline, scripts, templates, workflows, and references; no external
+  ppt-master install or path configuration is required. Use when the user asks for
+  academic slides, congress slides, lecture slides, medical/research decks,
+  company PPT, corporate report, project summary deck, HR template PPT, or mentions
+  hr-ppt.
 ---
 
-# HR-PPT — Academic & Company Presentation Builder (hr)
+# HR-PPT
 
-> A **thin specialization** of `ppt-master`. It does **not** reimplement the pipeline. It locks
-> a scenario *profile* (template + mode + visual style + conventions + confirmation defaults),
-> then runs the unmodified `ppt-master` Step 1 → Step 7 pipeline with those defaults injected.
+HR-PPT is a self-contained presentation skill. It embeds the complete ppt-master
+pipeline inside this skill folder, then adds two opinionated profiles on top:
 
-**Engine root** (`${PPT_MASTER_DIR}`): `C:\Users\Administrator\.claude\skills\ppt-master`
-All scripts, references, templates, and workflows referenced below live under that directory.
-This skill adds only the profile layer; everything else is ppt-master's.
+- Academic: congress, lecture, medical, and research decks.
+- Company: HR business-blue corporate reports and internal summaries.
 
-> [!CAUTION]
-> ## Inherited discipline (non-negotiable)
-> Every rule in `${PPT_MASTER_DIR}/SKILL.md` **Global Execution Discipline** applies here unchanged —
-> serial pipeline, ⛔ BLOCKING Eight Confirmations gate, no sub-agent SVG, sequential page generation,
-> per-page `spec_lock.md` re-read, hand-written SVG only. This skill changes **defaults and recommendations**,
-> never the gates. The Eight Confirmations are still presented and still BLOCK on user confirmation — the
-> profile only pre-fills the *recommended* values the user sees.
+Do not require, search for, or delegate to an external `ppt-master` installation.
+All core instructions and resources live in this skill folder.
 
----
+## Embedded Core
 
-## Step 0 — Profile Selection (this skill's only added step)
+Set `SKILL_DIR` to the directory containing this `SKILL.md`.
 
-🚧 **GATE**: user invoked this skill (or asked for an academic / company deck).
+Before running the generation pipeline, read `references/ppt-master-core.md`
+completely. That file is the embedded core pipeline. Treat every path in it as
+relative to this HR-PPT skill root:
 
-Pick the profile. **Do not ask if the request already makes it obvious** (e.g. "做个学术讲座" → academic;
-"用hr模板做述职" → company; the CLAUDE.md `公司模板` alias → company). Ask one question only when genuinely ambiguous:
+- `scripts/` contains the executable pipeline tools.
+- `references/` contains supporting instruction files.
+- `templates/` contains layouts, decks, chart templates, icons, and specs.
+- `workflows/` contains standalone or opt-in workflows such as beautify,
+  template-fill, visual review, chart verification, and live preview.
+- `requirements.txt` and `.env.example` are bundled in this repository.
 
-> 这份要走 **学术**（大会/讲座·医学研究·AMA 引用·数据图表）还是 **公司**（hr商务蓝·汇报/述职）模板？
+The embedded core's Global Execution Discipline remains mandatory: serial
+pipeline, blocking Eight Confirmations gate, no speculative execution, no
+sub-agent SVG generation, sequential page generation, per-page `spec_lock.md`
+re-read, and hand-written SVG pages.
 
-Once chosen, announce the locked profile in one line, then proceed to **Pipeline Delegation** below.
+## Step 0: Profile Selection
 
----
+Select one profile before entering the embedded core pipeline. Do not ask if the
+request already makes the profile obvious. Ask one concise question only when it
+is genuinely ambiguous:
 
-## Profile A — 学术 / Academic (congress · lecture · medical research)
+> Should this use the Academic profile or the Company profile?
 
-Locks the following as the **recommended defaults** carried into ppt-master Step 3 + Step 4:
+After choosing, announce the locked profile in one line, then proceed to the
+embedded core pipeline with the profile injections below.
+
+## Profile A: Academic
+
+Use for congress talks, lectures, medical research decks, journal-club style
+presentations, and data-heavy scientific narratives.
 
 | Slot | Locked default | Notes |
-|---|---|---|
-| **Template (Step 3)** | `${PPT_MASTER_DIR}/templates/layouts/medical_university` (`kind: layout`) | Inject this path into Step 3 as if the user supplied it → Step 3 dispatches it (structure locked; identity decided in confirmations e–g). |
-| **Mode (§d Layer 1)** | `instructional` | Teaching/explaining a topic. Alternate `pyramid` when the deck is a data-review / conclusion-first results talk. |
-| **Visual style (§d Layer 2)** | `editorial` | Clean academic hierarchy, serif/sans interplay. Alternates: `data-journalism` (chart-dense), `swiss-minimal` (type-led). |
-| **Color (§e)** | medical teal / academic blue family | Default to the layout's medical-blue identity; offer a teal variant (matches the user's NSCLC congress decks). Still a ≥3-candidate confirmation. |
-| **Typography (§g)** | CJK 思源黑体/微软雅黑 · Latin Segoe UI/Source Sans; `delivery_purpose: presentation` baseline | Academic lecture = projected; default body baseline 32px unless source is text-dense. |
-| **Formula policy (§7)** | `mixed` | Render stats / pharmacokinetic / complex expressions as PNG; keep simple inline as text. |
-| **Citations / data** | AMA numbered references; figure & table numbering; source line on every data/chart page | Author into §IX outline and page footers; superscript numbering in body. |
-| **`content_divergence`** | follow source closely | Academic facts stay sourced at every level — no invented data, conclusions traceable to the source. |
-| **Image usage (§h)** | default `none` / `provided` | Academic decks lean on charts + provided figures; only run AI/web image acquisition if the user asks. |
+| --- | --- | --- |
+| Template | `${SKILL_DIR}/templates/layouts/medical_university` (`kind: layout`) | Inject as an explicit Step 3 template directory path. |
+| Mode | `instructional` | Use `pyramid` for conclusion-first results reviews. |
+| Visual style | `editorial` | Use `data-journalism` for chart-dense decks or `swiss-minimal` for type-led decks. |
+| Color | medical teal / academic blue | Default to the layout identity; offer teal when it fits oncology or clinical decks. |
+| Typography | CJK Microsoft YaHei or Source Han Sans; Latin Segoe UI or Source Sans | Projected lecture baseline; avoid tiny body text. |
+| Formula policy | `mixed` | Render complex equations as PNG; keep simple inline formulas as text. |
+| Citation policy | AMA numbered citations | Add figure/table numbering and a source line on every data/chart page. |
+| Content divergence | follow source closely | No invented data; conclusions must trace to source material. |
+| Image usage | `none` or `provided` | Prefer charts and supplied figures; search or generate images only when requested. |
 
----
+## Profile B: Company
 
-## Profile B — 公司 / Company (hr corporate · 汇报 · 述职 · 项目总结)
+Use for HR business-blue company reports, internal briefings, project summaries,
+performance reviews, work reports, and management readouts.
 
 | Slot | Locked default | Notes |
-|---|---|---|
-| **Template (Step 3)** | `${PPT_MASTER_DIR}/templates/decks/company_standard` (`kind: deck`) | The hr standard deck — full replica (identity + structure + middle all locked). Inject this path into Step 3. Same target as the CLAUDE.md `公司模板` alias. |
-| **Mode (§d Layer 1)** | `pyramid` | Conclusion-first exec reporting (述职 / 项目总结). Alternate `briefing` for status / 周报 / reference packs. |
-| **Visual style (§d Layer 2)** | `swiss-minimal` | Stable, professional, grid-locked — matches the business-blue deck. Alternate `soft-rounded` for training material. |
-| **Color (§e)** | locked by deck = business blue `#2661B2` | Deck `kind` locks identity; do not re-poll color unless the user overrides. |
-| **Typography (§g)** | CJK 微软雅黑 · Latin Segoe UI; `delivery_purpose` per use (述职=presentation, 文档型汇报=balanced) | — |
-| **Voice & tone** | restrained corporate Chinese | Inherited from the deck's identity segment. |
-| **Image usage (§h)** | default `none` / `provided` | Corporate decks use brand assets + provided figures; AI imagery off unless asked. |
-| **Formula policy (§7)** | `text-only` | Corporate reporting rarely needs rendered formulas. |
+| --- | --- | --- |
+| Template | `${SKILL_DIR}/templates/decks/company_standard` (`kind: deck`) | Inject as an explicit Step 3 template directory path. |
+| Mode | `pyramid` | Use `briefing` for status reports, weekly reports, or reference packs. |
+| Visual style | `swiss-minimal` | Stable grid, quiet hierarchy, professional report feel. |
+| Color | business blue `#2661B2` | Locked by the deck unless the user explicitly overrides. |
+| Typography | CJK Microsoft YaHei; Latin Segoe UI | Match delivery purpose: presentation, document-style report, or balanced. |
+| Voice | restrained corporate Chinese | Keep wording concise and decision-oriented. |
+| Image usage | `none` or `provided` | Prefer brand assets and supplied figures; AI imagery is off unless requested. |
+| Formula policy | `text-only` | Corporate reporting usually does not need rendered formulas. |
 
-> ➕ **Adding more company brands later**: register them as `kind: deck` (or `kind: brand`) packages under
-> `${PPT_MASTER_DIR}/templates/decks|brands/`, then add a profile-B variant row here pointing at the new path.
-> Same mechanism as the CLAUDE.md template-alias table.
+## Pipeline Execution
 
----
+After Step 0, run the embedded core pipeline from
+`references/ppt-master-core.md` unchanged, with these injections:
 
-## Pipeline Delegation
+1. Step 3 Template Option: treat the selected profile's template path as an
+   explicit user-supplied directory path. Read the template `design_spec.md`,
+   dispatch by `kind`, copy the template files into the project, and split
+   bitmap assets into `images/` exactly as the embedded core specifies.
+2. Step 4 Strategist / Eight Confirmations: present the embedded core's Eight
+   Confirmations, but seed recommended values from the selected profile. The
+   confirmation gate remains blocking; confirmed user edits always win and must
+   be written into `design_spec.md` / `spec_lock.md`.
+3. Steps 1, 2, 5, 6, 7, post-processing, export, and all standalone workflows:
+   follow the embedded core instructions and use only the bundled resources in
+   this repository.
 
-After Step 0 locks a profile, **load `${PPT_MASTER_DIR}/SKILL.md` and run its full pipeline Step 1 → Step 7 unchanged**, with exactly these injections from the chosen profile:
+When adding more company brands or academic templates later, register them under
+this repository's `templates/decks/`, `templates/layouts/`, or
+`templates/brands/`, then add a new profile row here pointing to the local path.
 
-1. **Step 3 (Template Option)** — treat the profile's **Template path** as an *explicit user-supplied directory path*. This triggers ppt-master's Step 3 dispatch (single-path: read the spec's `kind`, copy into `<project>/templates/`, split bitmaps to `images/`) exactly as if the user had typed the path. No fuzzy matching — the path is concrete.
-2. **Step 4 (Strategist / Eight Confirmations)** — present the Eight Confirmations as ppt-master defines, but seed each **recommended** value from the profile table above (mode, visual style, color, typography, formula policy, image usage, conventions). The ⛔ BLOCKING gate is unchanged: the user confirms or edits; confirmed values win and are written verbatim to `design_spec.md` / `spec_lock.md`. For the academic profile, also fold the AMA-citation + figure-numbering conventions into the §IX outline authoring and page-footer plan.
-3. **Steps 1, 2, 5, 6, 7** — run exactly as ppt-master specifies. No changes. (Step 5 image acquisition usually skips, since both profiles default image usage to `none`/`provided`.)
+## Windows Note
 
-Everything else — source conversion, project init, Strategist role definition, Executor SVG rules, quality check, post-processing, export — is ppt-master's, read from `${PPT_MASTER_DIR}/references/…` and `${PPT_MASTER_DIR}/scripts/…` at the points the pipeline calls for them.
-
-> **Windows note**: if a `python3 …` command fails, rerun with `python` (python.org installs ship `python.exe`, not `python3.exe`).
+If a `python3 ...` command fails on Windows, rerun the same command with
+`python ...`.
