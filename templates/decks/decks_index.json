@@ -1,4 +1,10 @@
 {
+  "hengrui_standard": {
+    "summary": "Hengrui / 恒瑞 business-blue corporate deck template for internal reports, project summaries, performance reviews, and company-standard presentations.",
+    "canvas_format": "ppt169",
+    "page_count": 5,
+    "primary_color": "#2661B2"
+  },
   "company_standard": {
     "summary": "企业内部汇报、工作/项目总结、述职与通用商务演示；稳重、专业的商务蓝风格。",
     "canvas_format": "ppt169",

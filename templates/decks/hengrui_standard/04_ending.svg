@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- 模板: 结束页 - company_standard -->
+
+  <!-- 背景兜底色 -->
+  <rect x="0" y="0" width="1280" height="720" fill="#002B5C"/>
+  <!-- 品牌封面背景图（与封面同底） -->
+  <image x="0" y="0" width="1280" height="720" xlink:href="cover_bg.jpg" preserveAspectRatio="xMidYMid slice"/>
+
+  <!-- 左上品牌 Logo -->
+  <image x="36" y="61" width="210" height="132" xlink:href="logo_main.png" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- 致谢主文案 -->
+  <text x="316" y="328" text-anchor="middle" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="53" font-weight="bold" fill="#FFFFFF">{{THANK_YOU}}</text>
+  <!-- 英文副文案 -->
+  <text x="316" y="421" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="20" fill="#FFFFFF" letter-spacing="2">{{ENDING_SUBTITLE}}</text>
+  <!-- 汇报人 / 部门 / 日期 -->
+  <text x="316" y="576" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="18" fill="#E8EEF6">{{CONTACT_INFO}}</text>
+</svg>

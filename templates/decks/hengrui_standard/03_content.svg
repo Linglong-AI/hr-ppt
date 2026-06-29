@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- 模板: 正文内容页 - company_standard -->
+  <defs>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38BFD4"/>
+      <stop offset="0.4" stop-color="#03ABDA"/>
+      <stop offset="0.7" stop-color="#2C73BA"/>
+      <stop offset="1" stop-color="#2661B1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 白色背景 -->
+  <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+
+  <!-- 页眉：页面标题 -->
+  <text x="50" y="84" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="32" font-weight="bold" fill="#2661B2">{{PAGE_TITLE}}</text>
+  <!-- 标题下渐变强调条 -->
+  <rect x="50" y="106" width="1180" height="4" fill="url(#accentGrad)"/>
+  <!-- 右上角品牌 Logo -->
+  <image x="1144" y="15" width="126" height="62" xlink:href="logo_corner.png" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- 内容区域占位（由 Executor 按实际内容自由布局） -->
+  <rect x="50" y="168" width="1180" height="472" fill="none" stroke="#D9E2F0" stroke-width="2" stroke-dasharray="8 8"/>
+  <text x="640" y="398" text-anchor="middle" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="18" fill="#9FB3CC">{{CONTENT_AREA}}</text>
+  <text x="640" y="428" text-anchor="middle" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="14" fill="#9FB3CC">（由 Executor 根据实际内容自由布局）</text>
+
+  <!-- 页脚：右下角三角 + 页码 -->
+  <polygon points="1280,681 1280,720 1224,720" fill="#2661B2"/>
+  <text x="1264" y="712" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF">{{PAGE_NUM}}</text>
+</svg>

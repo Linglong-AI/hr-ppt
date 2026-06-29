@@ -3,7 +3,7 @@
 Self-contained presentation skill for two locked scenarios:
 
 - **Academic**: congress, lecture, medical/research, citation-aware, data-heavy decks.
-- **Company**: HR business-blue corporate reports, project summaries, performance reviews, and internal briefings.
+- **Company**: Hengrui / HR business-blue corporate reports, project summaries, performance reviews, and internal briefings.
 
 This repository includes the complete embedded ppt-master pipeline: scripts,
 references, templates, workflows, dependency list, and environment example.
@@ -24,15 +24,16 @@ Place this folder in your skills directory, for example:
 - `references/ppt-master-core.md`: embedded core pipeline instructions.
 - `scripts/`: source conversion, project management, image, SVG, and PPTX tools.
 - `templates/`: layouts, decks, chart templates, icons, and design specs.
+  The preserved Hengrui company template is `templates/decks/hengrui_standard/`.
 - `workflows/`: standalone workflows such as beautify, template-fill, live preview, and chart verification.
 - `requirements.txt`: Python dependencies used by the embedded tools.
 - `.env.example`: optional provider and runtime configuration.
 
 ## Usage
 
-Ask for an academic deck or a company report deck. The skill chooses the profile
-when obvious, asks once when ambiguous, then runs the embedded pipeline using the
-bundled resources.
+Ask for an academic deck, a company report deck, or a 恒瑞 / Hengrui template
+deck. The skill chooses the profile when obvious, asks once when ambiguous, then
+runs the embedded pipeline using the bundled resources.
 
 ## License
 

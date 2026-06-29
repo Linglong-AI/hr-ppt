@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- 模板: 章节扉页 - company_standard -->
+  <defs>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38BFD4"/>
+      <stop offset="0.4" stop-color="#03ABDA"/>
+      <stop offset="0.7" stop-color="#2C73BA"/>
+      <stop offset="1" stop-color="#2661B1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 白色背景 -->
+  <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+  <!-- 右侧品牌蓝色块 -->
+  <rect x="808" y="0" width="472" height="720" fill="#2661B2"/>
+  <!-- 超大章节序号水印 -->
+  <text x="1044" y="497" text-anchor="middle" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="400" font-weight="bold" fill="#5A8AD4">{{CHAPTER_NUM}}</text>
+
+  <!-- 左上品牌 Logo -->
+  <image x="25" y="15" width="92" height="44" xlink:href="logo_sm.png" preserveAspectRatio="xMidYMid meet"/>
+
+  <!-- 英文眉标 -->
+  <text x="80" y="166" font-family="'Segoe UI','微软雅黑',sans-serif" font-size="18.67" font-weight="bold" fill="#2661B2" letter-spacing="2.67">PART {{CHAPTER_NUM}} · SECTION</text>
+  <!-- 章节大标题 -->
+  <text x="80" y="228" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="42.67" font-weight="bold" fill="#2661B2">{{CHAPTER_TITLE}}</text>
+  <!-- 渐变强调条 -->
+  <rect x="80" y="286" width="336" height="4.2" fill="url(#accentGrad)"/>
+  <!-- 章节导语 -->
+  <text x="80" y="320" font-family="'微软雅黑','Microsoft YaHei',sans-serif" font-size="18.67" fill="#595959">{{CHAPTER_DESC}}</text>
+</svg>

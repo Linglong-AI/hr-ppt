@@ -3,13 +3,13 @@ name: hr-ppt
 description: >
   Self-contained presentation builder for two locked scenarios: academic congress /
   lecture decks (medical or research, AMA citations, figure/table numbering, data
-  charts) and HR corporate decks (business-blue company reports, project summaries,
-  performance reviews, internal briefings). Includes the full embedded ppt-master
+  charts) and Hengrui / HR corporate decks (business-blue company reports,
+  project summaries, performance reviews, internal briefings). Includes the full embedded ppt-master
   SVG-to-PPTX pipeline, scripts, templates, workflows, and references; no external
   ppt-master install or path configuration is required. Use when the user asks for
   academic slides, congress slides, lecture slides, medical/research decks,
-  company PPT, corporate report, project summary deck, HR template PPT, or mentions
-  hr-ppt.
+  company PPT, corporate report, project summary deck, Hengrui PPT, 恒瑞模板,
+  HR template PPT, or mentions hr-ppt.
 ---
 
 # HR-PPT
@@ -18,7 +18,7 @@ HR-PPT is a self-contained presentation skill. It embeds the complete ppt-master
 pipeline inside this skill folder, then adds two opinionated profiles on top:
 
 - Academic: congress, lecture, medical, and research decks.
-- Company: HR business-blue corporate reports and internal summaries.
+- Company: Hengrui / HR business-blue corporate reports and internal summaries.
 
 Do not require, search for, or delegate to an external `ppt-master` installation.
 All core instructions and resources live in this skill folder.
@@ -71,19 +71,19 @@ presentations, and data-heavy scientific narratives.
 | Content divergence | follow source closely | No invented data; conclusions must trace to source material. |
 | Image usage | `none` or `provided` | Prefer charts and supplied figures; search or generate images only when requested. |
 
-## Profile B: Company
+## Profile B: Company / Hengrui
 
-Use for HR business-blue company reports, internal briefings, project summaries,
-performance reviews, work reports, and management readouts.
+Use for Hengrui / HR business-blue company reports, internal briefings, project
+summaries, performance reviews, work reports, and management readouts.
 
 | Slot | Locked default | Notes |
 | --- | --- | --- |
-| Template | `${SKILL_DIR}/templates/decks/company_standard` (`kind: deck`) | Inject as an explicit Step 3 template directory path. |
+| Template | `${SKILL_DIR}/templates/decks/hengrui_standard` (`kind: deck`) | Preserved Hengrui company template; inject as an explicit Step 3 template directory path. |
 | Mode | `pyramid` | Use `briefing` for status reports, weekly reports, or reference packs. |
 | Visual style | `swiss-minimal` | Stable grid, quiet hierarchy, professional report feel. |
 | Color | business blue `#2661B2` | Locked by the deck unless the user explicitly overrides. |
 | Typography | CJK Microsoft YaHei; Latin Segoe UI | Match delivery purpose: presentation, document-style report, or balanced. |
-| Voice | restrained corporate Chinese | Keep wording concise and decision-oriented. |
+| Voice | restrained Hengrui corporate Chinese | Keep wording concise and decision-oriented. |
 | Image usage | `none` or `provided` | Prefer brand assets and supplied figures; AI imagery is off unless requested. |
 | Formula policy | `text-only` | Corporate reporting usually does not need rendered formulas. |
 
