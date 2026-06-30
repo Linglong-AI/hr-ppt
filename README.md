@@ -8,14 +8,22 @@ Self-contained presentation skill for two locked scenarios:
 This repository includes the complete embedded ppt-master pipeline: scripts,
 references, templates, workflows, dependency list, and environment example.
 Standalone use needs no separate `ppt-master` install and no external path
-configuration.
+configuration in either Codex or Claude.
 
 ## Install
 
 Place this folder in your skills directory, for example:
 
 ```text
+~/.codex/skills/hr-ppt/
 ~/.claude/skills/hr-ppt/
+```
+
+GitHub `main` is the source of truth. To sync both installed copies from
+GitHub:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "$HOME\.codex\skills\hr-ppt\scripts\sync_local_from_github.ps1"
 ```
 
 ## Contents

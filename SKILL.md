@@ -9,7 +9,9 @@ description: >
   ppt-master install or path configuration is required. Use when the user asks for
   academic slides, congress slides, lecture slides, medical/research decks,
   company PPT, corporate report, project summary deck, Hengrui PPT, 恒瑞模板,
-  HR template PPT, or mentions hr-ppt.
+  HR template PPT, company template, or mentions hr-ppt. For generic free-design
+  decks with no academic or company scenario lock, prefer a generic ppt-master /
+  presentation workflow unless the user explicitly asks for hr-ppt.
 ---
 
 # HR-PPT
@@ -45,6 +47,8 @@ re-read, and hand-written SVG pages.
 
 ## Persistent Local Rules
 
+- Scope boundary: use HR-PPT for Academic or Company / Hengrui scenarios. If the user asks for a generic or free-design deck with no scenario lock, route to a generic ppt-master / presentation workflow unless they explicitly ask to use hr-ppt.
+- Treat company-template aliases such as `company template`, `Hengrui template`, `HR template`, and local company-template aliases as Company / Hengrui.
 - Step 4 must use the HTML Confirm UI by default. Do not replace it with chat-only confirmations unless the user explicitly opts out of the page or the page launch is verified to have failed. In Codex Desktop, use `--daemon --wait` for the blocking confirmation gate or a long-running foreground/session for demos, and verify the URL is reachable before telling the user it is open.
 - When the user asks for `N` body pages / `N页正文`, interpret `N` as body slides only. For Company / Hengrui decks, include cover + `N` body slides + ending page by default unless the user explicitly says to omit any wrapper page.
 
@@ -70,7 +74,7 @@ presentations, and data-heavy scientific narratives.
 | Mode | `instructional` | Use `pyramid` for conclusion-first results reviews. |
 | Visual style | `editorial` | Use `data-journalism` for chart-dense decks or `swiss-minimal` for type-led decks. |
 | Color | medical teal / academic blue | Default to the layout identity; offer teal when it fits oncology or clinical decks. |
-| Typography | CJK Microsoft YaHei or Source Han Sans; Latin Segoe UI or Source Sans | Projected lecture baseline; avoid tiny body text. |
+| Typography | CJK Microsoft YaHei or Source Han Sans; Latin Segoe UI or Source Sans | Projected lecture baseline; default body baseline 32px unless the source is text-dense; avoid tiny body text. |
 | Formula policy | `mixed` | Render complex equations as PNG; keep simple inline formulas as text. |
 | Citation policy | AMA numbered citations | Add figure/table numbering and a source line on every data/chart page. |
 | Content divergence | follow source closely | No invented data; conclusions must trace to source material. |
@@ -85,7 +89,7 @@ summaries, performance reviews, work reports, and management readouts.
 | --- | --- | --- |
 | Template | `${SKILL_DIR}/templates/decks/hengrui_standard` (`kind: deck`) | Preserved Hengrui company template; inject as an explicit Step 3 template directory path. |
 | Mode | `pyramid` | Use `briefing` for status reports, weekly reports, or reference packs. |
-| Visual style | `swiss-minimal` | Stable grid, quiet hierarchy, professional report feel. |
+| Visual style | `swiss-minimal` | Stable grid, quiet hierarchy, professional report feel; use `soft-rounded` for training material when appropriate. |
 | Color | business blue `#2661B2` | Locked by the deck unless the user explicitly overrides. |
 | Typography | CJK Microsoft YaHei; Latin Segoe UI | Match delivery purpose: presentation, document-style report, or balanced. |
 | Voice | restrained Hengrui corporate Chinese | Keep wording concise and decision-oriented. |

@@ -1,13 +1,17 @@
-# Sync the installed hr-ppt skill from its GitHub source of truth.
-# Normal case: if the installed folder is a valid Git checkout, fast-forward it.
-# Repair case: if the installed folder is not a Git checkout, clone GitHub to a
-# temporary directory, back up the installed folder, and mirror the clone in.
+# Sync installed hr-ppt skill copies from the GitHub source of truth.
+# Normal case: valid Git checkouts are fast-forwarded.
+# Repair case: broken or missing folders are backed up and mirrored from a
+# temporary GitHub clone.
 
 [CmdletBinding()]
 param(
     [string]$RepoUrl = "https://github.com/Linglong-AI/hr-ppt.git",
     [string]$Ref = "main",
-    [string]$Dest = (Join-Path $HOME ".codex\skills\hr-ppt"),
+    [ValidateSet("all", "codex", "claude")]
+    [string]$Target = "all",
+    [string]$CodexDest = (Join-Path $HOME ".codex\skills\hr-ppt"),
+    [string]$ClaudeDest = (Join-Path $HOME ".claude\skills\hr-ppt"),
+    [string]$Dest,
     [string]$WorkDir,
     [switch]$Force
 )
@@ -20,6 +24,15 @@ function Get-FullPath {
     return [System.IO.Path]::GetFullPath($Path)
 }
 
+function Get-DestinationLabel {
+    param([Parameter(Mandatory = $true)][string]$Path)
+
+    $normalized = (Get-FullPath $Path).ToLowerInvariant().Replace("/", "\")
+    if ($normalized.Contains("\.codex\skills\hr-ppt")) { return "codex" }
+    if ($normalized.Contains("\.claude\skills\hr-ppt")) { return "claude" }
+    return "custom"
+}
+
 function Assert-SafeDest {
     param([Parameter(Mandatory = $true)][string]$Path)
 
@@ -30,8 +43,12 @@ function Assert-SafeDest {
     }
 
     $normalized = $full.ToLowerInvariant().Replace("/", "\")
-    if (-not $normalized.Contains("\.codex\skills\hr-ppt")) {
-        throw "Refusing to mirror outside the Codex hr-ppt skill path: $full"
+    $allowed = (
+        $normalized.Contains("\.codex\skills\hr-ppt") -or
+        $normalized.Contains("\.claude\skills\hr-ppt")
+    )
+    if (-not $allowed) {
+        throw "Refusing to mirror outside the Codex/Claude hr-ppt skill paths: $full"
     }
 
     return $full
@@ -83,48 +100,82 @@ function New-WorkDirectory {
     return (New-Item -ItemType Directory -Force -Path $path).FullName
 }
 
-$destFull = Assert-SafeDest $Dest
+function Ensure-GitHubClone {
+    if (-not $script:ClonePath) {
+        $script:WorkPath = New-WorkDirectory $WorkDir
+        $script:ClonePath = Join-Path $script:WorkPath "hr-ppt"
+        & git clone --branch $Ref --depth 1 $RepoUrl $script:ClonePath
+        if ($LASTEXITCODE -ne 0) { throw "git clone failed" }
+    }
+    return $script:ClonePath
+}
 
-if ((Test-ValidGitCheckout $destFull) -and -not $Force) {
-    $dirty = & git -C $destFull status --porcelain
-    if ($dirty) {
-        throw "Installed hr-ppt has local changes. Commit/push them or rerun with -Force after backing them up."
+function Sync-OneDestination {
+    param([Parameter(Mandatory = $true)][string]$Destination)
+
+    $destFull = Assert-SafeDest $Destination
+    $label = Get-DestinationLabel $destFull
+
+    if ((Test-ValidGitCheckout $destFull) -and -not $Force) {
+        $dirty = & git -C $destFull status --porcelain
+        if ($dirty) {
+            throw "$label hr-ppt has local changes. Commit/push them or rerun with -Force after backing them up."
+        }
+
+        & git -C $destFull fetch origin $Ref
+        if ($LASTEXITCODE -ne 0) { throw "$label git fetch failed" }
+
+        & git -C $destFull pull --ff-only origin $Ref
+        if ($LASTEXITCODE -ne 0) { throw "$label git pull --ff-only failed" }
+
+        $head = & git -C $destFull rev-parse --short HEAD
+        Write-Host "$label hr-ppt updated to $head at $destFull"
+        return
     }
 
-    & git -C $destFull fetch origin $Ref
-    if ($LASTEXITCODE -ne 0) { throw "git fetch failed" }
+    $clone = Ensure-GitHubClone
+    $backupRoot = Join-Path $script:WorkPath (Join-Path "backup" $label)
+    $backup = Join-Path $backupRoot "hr-ppt"
 
-    & git -C $destFull pull --ff-only origin $Ref
-    if ($LASTEXITCODE -ne 0) { throw "git pull --ff-only failed" }
+    if (Test-Path -LiteralPath $destFull) {
+        New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
+        Invoke-RobocopyChecked -Source $destFull -Destination $backup -ExtraArgs @("/XD", "_sync", "__pycache__")
+        Write-Host "$label existing copy backed up to $backup"
+    }
+    else {
+        New-Item -ItemType Directory -Force -Path $destFull | Out-Null
+    }
+
+    Invoke-RobocopyChecked -Source $clone -Destination $destFull
+
+    if (-not (Test-Path -LiteralPath (Join-Path $destFull "SKILL.md") -PathType Leaf)) {
+        throw "$label mirrored folder is missing SKILL.md"
+    }
 
     $head = & git -C $destFull rev-parse --short HEAD
-    Write-Host "Installed hr-ppt updated to $head"
-    exit 0
+    Write-Host "$label hr-ppt mirrored from GitHub at $head at $destFull"
 }
 
-$work = New-WorkDirectory $WorkDir
-$clone = Join-Path $work "hr-ppt"
-$backupRoot = Join-Path $work "backup"
-$backup = Join-Path $backupRoot "hr-ppt"
+$script:WorkPath = $null
+$script:ClonePath = $null
 
-& git clone --branch $Ref --depth 1 $RepoUrl $clone
-if ($LASTEXITCODE -ne 0) { throw "git clone failed" }
-
-if (Test-Path -LiteralPath $destFull) {
-    New-Item -ItemType Directory -Force -Path $backupRoot | Out-Null
-    Invoke-RobocopyChecked -Source $destFull -Destination $backup -ExtraArgs @("/XD", "_sync", "__pycache__")
-    Write-Host "Existing installed copy backed up to $backup"
+if (-not [string]::IsNullOrWhiteSpace($Dest)) {
+    $destinations = @($Dest)
+}
+elseif ($Target -eq "codex") {
+    $destinations = @($CodexDest)
+}
+elseif ($Target -eq "claude") {
+    $destinations = @($ClaudeDest)
 }
 else {
-    New-Item -ItemType Directory -Force -Path $destFull | Out-Null
+    $destinations = @($CodexDest, $ClaudeDest)
 }
 
-Invoke-RobocopyChecked -Source $clone -Destination $destFull
-
-if (-not (Test-Path -LiteralPath (Join-Path $destFull "SKILL.md") -PathType Leaf)) {
-    throw "Mirrored folder is missing SKILL.md"
+foreach ($destination in $destinations) {
+    Sync-OneDestination -Destination $destination
 }
 
-$head = & git -C $destFull rev-parse --short HEAD
-Write-Host "Installed hr-ppt mirrored from GitHub at $head"
-Write-Host "Backup/work directory: $work"
+if ($script:WorkPath) {
+    Write-Host "Backup/work directory: $script:WorkPath"
+}
