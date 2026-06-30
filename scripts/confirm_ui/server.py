@@ -87,6 +87,32 @@ DEFAULT_PORT = 5050
 WAIT_TIMEOUT_DEFAULT = 590
 
 
+def _running_in_codex_shell() -> bool:
+    """Return True when launched by Codex's managed shell."""
+    return bool(os.environ.get('CODEX_SHELL') or os.environ.get('CODEX_THREAD_ID'))
+
+
+def _wait_for_http_ready(url: str, proc: subprocess.Popen, timeout: float = 8.0) -> bool:
+    """Wait until the launched page responds before reporting the URL."""
+    deadline = time.time() + timeout
+    last_error: Optional[BaseException] = None
+    while time.time() < deadline:
+        returncode = proc.poll()
+        if returncode is not None:
+            logger.error('confirm UI exited before the page became reachable (code=%s)', returncode)
+            return False
+        try:
+            with urllib.request.urlopen(url, timeout=0.5) as response:
+                if response.status < 500:
+                    logger.info('confirm UI reachable: %s', url)
+                    return True
+        except Exception as exc:
+            last_error = exc
+        time.sleep(0.25)
+    logger.error('confirm UI did not become reachable at %s within %.1fs: %s', url, timeout, last_error)
+    return False
+
+
 def _wait_for_result(
     result_file: Path,
     proc: subprocess.Popen,
@@ -495,6 +521,15 @@ def main(argv: Optional[list[str]] = None) -> int:
             )
             return 1
 
+        if not args.wait and _running_in_codex_shell():
+            logger.error(
+                'bare --daemon cannot be handed off from Codex Desktop: the '
+                'managed shell cleans up child processes when the launch command '
+                'exits. Use --daemon --wait for the blocking confirmation gate, '
+                'or run this server as a long-running foreground session.'
+            )
+            return 2
+
         confirm_dir = project_path / CONFIRM_DIR_NAME
         confirm_dir.mkdir(parents=True, exist_ok=True)
         log_path = confirm_dir / 'server.log'
@@ -532,6 +567,8 @@ def main(argv: Optional[list[str]] = None) -> int:
         url = f'http://localhost:{port}'
         logger.info('started confirm UI in background: %s (pid=%s)', url, proc.pid)
         logger.info('log: %s', log_path)
+        if not _wait_for_http_ready(url, proc):
+            return proc.poll() or 1
         if args.wait:
             return _wait_for_result(result_file, proc, started_at, args.wait_timeout)
         return 0

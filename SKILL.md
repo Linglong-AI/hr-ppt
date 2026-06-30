@@ -43,6 +43,11 @@ pipeline, blocking Eight Confirmations gate, no speculative execution, no
 sub-agent SVG generation, sequential page generation, per-page `spec_lock.md`
 re-read, and hand-written SVG pages.
 
+## Persistent Local Rules
+
+- Step 4 must use the HTML Confirm UI by default. Do not replace it with chat-only confirmations unless the user explicitly opts out of the page or the page launch is verified to have failed. In Codex Desktop, use `--daemon --wait` for the blocking confirmation gate or a long-running foreground/session for demos, and verify the URL is reachable before telling the user it is open.
+- When the user asks for `N` body pages / `N页正文`, interpret `N` as body slides only. For Company / Hengrui decks, include cover + `N` body slides + ending page by default unless the user explicitly says to omit any wrapper page.
+
 ## Step 0: Profile Selection
 
 Select one profile before entering the embedded core pipeline. Do not ask if the
