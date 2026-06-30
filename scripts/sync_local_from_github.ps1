@@ -60,8 +60,15 @@ function Test-ValidGitCheckout {
         return $false
     }
 
-    & git -C $Path rev-parse --is-inside-work-tree *> $null
-    return ($LASTEXITCODE -eq 0)
+    $oldPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = "Continue"
+        & git -C $Path rev-parse --is-inside-work-tree 1>$null 2>$null
+        return ($LASTEXITCODE -eq 0)
+    }
+    finally {
+        $ErrorActionPreference = $oldPreference
+    }
 }
 
 function New-WorkDirectory {
