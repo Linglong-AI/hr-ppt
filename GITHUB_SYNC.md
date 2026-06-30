@@ -20,16 +20,27 @@ GitHub: https://github.com/Linglong-AI/hr-ppt
 
 ## Normal Update
 
-Update both local installed copies from GitHub:
+For the everyday "make everything consistent" path, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "$HOME\.codex\skills\hr-ppt\scripts\sync_everywhere.ps1"
+```
+
+This handles the simple cases:
+
+- GitHub changed: update both Codex and Claude from GitHub.
+- Codex changed: commit/push Codex, then update Claude.
+- Claude changed: commit/push Claude, then update Codex.
+- A local copy is missing or has broken `.git` metadata: repair it from GitHub.
+
+If Codex and Claude both have different uncommitted changes, the script stops
+and asks for a manual decision instead of guessing.
+
+To only update installed copies from GitHub without promoting local changes:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File "$HOME\.codex\skills\hr-ppt\scripts\sync_local_from_github.ps1"
 ```
-
-The script updates valid Git checkouts with `git pull --ff-only`. If either
-local copy is missing or has broken `.git` metadata, it clones GitHub to a
-temporary directory, backs up the old local copy, and mirrors the GitHub version
-into that installed location.
 
 To update only one side:
 

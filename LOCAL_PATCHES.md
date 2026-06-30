@@ -34,6 +34,7 @@ workflows/sync-ppt-master.md
 GITHUB_SYNC.md
 scripts/sync_from_ppt_master.ps1
 scripts/sync_local_from_github.ps1
+scripts/sync_everywhere.ps1
 templates/decks/hengrui_standard/**
 ```
 

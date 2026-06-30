@@ -19,11 +19,10 @@ Place this folder in your skills directory, for example:
 ~/.claude/skills/hr-ppt/
 ```
 
-GitHub `main` is the source of truth. To sync both installed copies from
-GitHub:
+GitHub `main` is the source of truth. To sync GitHub plus both installed copies:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File "$HOME\.codex\skills\hr-ppt\scripts\sync_local_from_github.ps1"
+powershell -ExecutionPolicy Bypass -File "$HOME\.codex\skills\hr-ppt\scripts\sync_everywhere.ps1"
 ```
 
 ## Contents
